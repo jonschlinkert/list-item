@@ -14,32 +14,6 @@ npm i list-item --save
 var listitem = require('list-item');
 ```
 
-## API
-### [listitem](index.js#L45)
-
-Returns a function to generate a plain-text/markdown list-item, allowing options to be cached for subsequent calls.
-
-* `options` **{String}**  
-    - `nobullet` **{Boolean}**: Pass true if you only want the list iten and identation, but no bullets.
-    - `indent` **{String}**: The amount of leading indentation to use. default is `  `.
-    - `chars` **{String|Array}**: If a string is passed, [expand-range] will be used to generate an array of bullets (visit [expand-range] to see all options.) Or directly pass an array of bullets, numbers, letters or other characters to use for each list item. Default `['-', '*', '+', '~']`
-      
-* `fn` **{Function}**: pass a function [expand-range] to modify the bullet for an item as it's generated. See the [examples].    
-
-```js
-var li = listitem(options);
-
-li(0, 'Level 0 list item');
-//=> '- Level 0 list item'
-
-li(1, 'Level 1 list item');
-//=> '  * Level 1 list item'
-
-li(2, 'Level 2 list item');
-//=> '    + Level 2 list item'
-```
-
-
 ## Examples
 
 **Basic list**
@@ -95,6 +69,34 @@ I. a
       XXXI. d
         XLI. e
 ```
+
+
+## API
+### [listitem](index.js#L45)
+
+Returns a function to generate a plain-text/markdown list-item, allowing options to be cached for subsequent calls.
+
+* `options` **{String}**  
+    - `nobullet` **{Boolean}**: Pass true if you only want the list iten and identation, but no bullets.
+    - `indent` **{String}**: The amount of leading indentation to use. default is `  `.
+    - `chars` **{String|Array}**: If a string is passed, [expand-range] will be used to generate an array of bullets (visit [expand-range] to see all options.) Or directly pass an array of bullets, numbers, letters or other characters to use for each list item. Default `['-', '*', '+', '~']`
+      
+* `fn` **{Function}**: pass a function [expand-range] to modify the bullet for an item as it's generated. See the [examples].    
+
+```js
+var li = listitem(options);
+
+li(0, 'Level 0 list item');
+//=> '- Level 0 list item'
+
+li(1, 'Level 1 list item');
+//=> '  * Level 1 list item'
+
+li(2, 'Level 2 list item');
+//=> '    + Level 2 list item'
+```
+
+
 
 ## Run tests
 Install dev dependencies.
