@@ -1,0 +1,36 @@
+{
+  "name": "list-item",
+  "description": "Generate a single formatted list item, allowing you to easily generate lists with proper indentation, bullets, numbers or other leading characters.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jonschlinkert/list-item",
+  "author": {
+    "name": "Jon Schlinkert",
+    "url": "https://github.com/jonschlinkert"
+  },
+  "repository": "jonschlinkert/list-item",
+  "bugs": {
+    "url": "https://github.com/jonschlinkert/list-item/issues"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "expand-range": "^1.8.1",
+    "is-number": "^1.1.0",
+    "repeat-string": "^1.5.0"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "romanize": "^0.1.0",
+    "should": "*"
+  },
+  "keywords": []
+}
