@@ -37,8 +37,8 @@ module.exports = listitem;
  * @param  {String} `options`
  *   @option {Boolean} [options] `nobullet` Pass true if you only want the list iten and identation, but no bullets.
  *   @option {String} [options] `indent` The amount of leading indentation to use. default is `  `.
- *   @option {Number} [options] `chars` `chars` Array of bullets, numbers, letters or other characters to use for each list item. Default `['-', '*', '+', '~']`
- * @param {Function} `fn` pass a function to modify the bullet for an item as it's generated. See the examples
+ *   @option {String|Array} [options] `chars` If a string is passed, [expand-range] will be used to generate an array of bullets (visit [expand-range] to see all options.) Or directly pass an array of bullets, numbers, letters or other characters to use for each list item. Default `['-', '*', '+', '~']`
+ * @param {Function} `fn` pass a function [expand-range] to modify the bullet for an item as it's generated. See the [examples].
  * @api public
  */
 
@@ -48,37 +48,49 @@ function listitem(opts, fn) {
   }
 
   opts = opts || {};
-  opts.chars = opts.chars || ['-', '*', '+', '~'];
-  console.log(opts.chars)
+  var ch = character(opts, fn);
 
   return function(lvl, str) {
     if (lvl == null) {
-      throw new Error('listitem: invalid arguments.');
+      throw new Error('[listitem]: invalid arguments.');
     }
 
     lvl = isNumber(lvl) ? +lvl : 0;
 
+    var bullet = ch && ch[lvl % ch.length];
     var indent = typeof opts.indent !== 'string'
       ? (lvl > 0 ? '  ' : '')
       : opts.indent;
 
-    var ch = !opts.nobullet
-      ? bullet(lvl, opts, fn) + ' '
+    var prefix = !opts.nobullet
+      ? bullet + ' '
       : '';
 
     var res = '';
     res += repeat(indent, lvl);
-    res += ch;
+    res += prefix;
     res += str;
     return res;
   };
 };
 
-function bullet(i, opts, fn) {
-  var ch = opts.chars;
-  if (typeof ch === 'string') {
+/**
+ * Generate and cache the array of characters to use as
+ * bullets.
+ *
+ * @param  {Object} `opts` Options to pass to [expand-range]
+ * @param  {Function} `fn`
+ * @return {Array}
+ */
+
+function character(opts, fn) {
+  var chars = opts.chars || ['-', '*', '+', '~'];
+
+  if (typeof chars === 'string') {
     opts = Object.create(opts || {});
-    ch = expand(ch, opts, fn);
+    return expand(chars, opts, fn);
   }
-  return ch[i % ch.length];
+  return typeof fn === 'function'
+    ? chars.map(fn)
+    : chars;
 }
