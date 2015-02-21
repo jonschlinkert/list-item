@@ -1,7 +1,7 @@
 {
   "name": "list-item",
   "description": "Generate a single formatted list item, allowing you to easily generate lists with proper indentation, bullets, numbers or other leading characters.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/jonschlinkert/list-item",
   "author": {
     "name": "Jon Schlinkert",
@@ -32,5 +32,18 @@
     "romanize": "^0.1.0",
     "should": "*"
   },
-  "keywords": []
+  "keywords": [
+    "bullet",
+    "format",
+    "item",
+    "list",
+    "list-item",
+    "markdown",
+    "numbered",
+    "numerals",
+    "ordered",
+    "roman",
+    "test",
+    "unordered"
+  ]
 }
