@@ -48,14 +48,15 @@ function listitem(opts, fn) {
   }
 
   opts = opts || {};
-  var ch = character(opts, fn);
+  var chars = character(opts, fn);
 
-  return function(lvl, str) {
+  return function(lvl, str, sublvl) {
     if (lvl == null) {
       throw new Error('[listitem]: invalid arguments.');
     }
 
     lvl = isNumber(lvl) ? +lvl : 0;
+    var ch = chars(sublvl);
 
     var bullet = ch && ch[lvl % ch.length];
     var indent = typeof opts.indent !== 'string'
@@ -78,6 +79,8 @@ function listitem(opts, fn) {
  * Generate and cache the array of characters to use as
  * bullets.
  *
+ * TODO: split this out into simpler functions.
+ *
  * @param  {Object} `opts` Options to pass to [expand-range]
  * @param  {Function} `fn`
  * @return {Array}
@@ -85,12 +88,28 @@ function listitem(opts, fn) {
 
 function character(opts, fn) {
   var chars = opts.chars || ['-', '*', '+', '~'];
-
   if (typeof chars === 'string') {
     opts = Object.create(opts || {});
-    return expand(chars, opts, fn);
+    return function (sublvl) {
+      return expand(chars, opts, function(ch) {
+        return fn ? fn(ch, sublvl) : ch;
+      });
+    }
   }
-  return typeof fn === 'function'
-    ? chars.map(fn)
-    : chars;
+  if (typeof fn === 'function') {
+    return wrap(fn, chars);
+  }
+  return function () {
+    return chars;
+  }
+}
+
+function wrap (fn, chars) {
+  return function (sublvl) {
+    var args = [].slice.call(arguments);
+    return chars.map(function (ch) {
+      var ctx = args.concat.apply([], arguments);
+      return fn.apply(fn, ctx);
+    });
+  }
 }
