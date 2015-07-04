@@ -37,7 +37,7 @@ module.exports = listitem;
  * @param  {String} `options`
  *   @option {Boolean} [options] `nobullet` Pass true if you only want the list iten and identation, but no bullets.
  *   @option {String} [options] `indent` The amount of leading indentation to use. default is `  `.
- *   @option {String|Array} [options] `chars` If a string is passed, [expand-range] will be used to generate an array of bullets (visit [expand-range] to see all options.) Or directly pass an array of bullets, numbers, letters or other characters to use for each list item. Default `['-', '*', '+', '~']`
+ *   @option {String|Array} [options] `chars` If a string is passed, [expand-range] will be used to generate an array of bullets (visit [expand-range] to see all options.) Or directly pass an array of bullets, numbers, letters or other characters to use for each list item. Default `['-', '*', '+']`
  * @param {Function} `fn` pass a function [expand-range] to modify the bullet for an item as it's generated. See the [examples].
  * @api public
  */
@@ -79,6 +79,10 @@ function listitem(opts, fn) {
  * Generate and cache the array of characters to use as
  * bullets.
  *
+ * - http://spec.commonmark.org/0.19/#list-items
+ * - https://daringfireball.net/projects/markdown/syntax#list
+ * - https://help.github.com/articles/markdown-basics/#lists
+ *
  * TODO: split this out into simpler functions.
  *
  * @param  {Object} `opts` Options to pass to [expand-range]
@@ -87,7 +91,7 @@ function listitem(opts, fn) {
  */
 
 function character(opts, fn) {
-  var chars = opts.chars || ['-', '*', '+', '~'];
+  var chars = opts.chars || ['-', '*', '+'];
   if (typeof chars === 'string') {
     opts = Object.create(opts || {});
     return function (sublvl) {
