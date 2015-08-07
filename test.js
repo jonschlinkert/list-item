@@ -1,14 +1,7 @@
-/*!
- * list-item <https://github.com/jonschlinkert/list-item>
- *
- * Copyright (c) 2015, Jon Schlinkert.
- * Licensed under the MIT License.
- */
-
 'use strict';
 
-var assert = require('assert');
 require('should');
+var assert = require('assert');
 var romanize = require('romanize');
 var listitem = require('./');
 var li;
@@ -155,3 +148,4 @@ describe('custom characters', function () {
     }).should.throw('[listitem]: invalid arguments.');
   });
 });
+/* deps: mocha */

@@ -44,21 +44,21 @@ module.exports = listitem;
 
 function listitem(opts, fn) {
   if (typeof opts === 'function') {
-    fn = opts; opts = null;
+    fn = opts;
+    opts = {};
   }
 
   opts = opts || {};
   var chars = character(opts, fn);
 
   return function(lvl, str, sublvl) {
-    if (lvl == null) {
+    if (!isNumber(lvl)) {
       throw new Error('[listitem]: invalid arguments.');
     }
 
     lvl = isNumber(lvl) ? +lvl : 0;
     var ch = chars(sublvl);
-
-    var bullet = ch && ch[lvl % ch.length];
+    var bullet = ch ? ch[lvl % ch.length] : '';
     var indent = typeof opts.indent !== 'string'
       ? (lvl > 0 ? '  ' : '')
       : opts.indent;
@@ -73,7 +73,7 @@ function listitem(opts, fn) {
     res += str;
     return res;
   };
-};
+}
 
 /**
  * Generate and cache the array of characters to use as
@@ -98,22 +98,22 @@ function character(opts, fn) {
       return expand(chars, opts, function(ch) {
         return fn ? fn(ch, sublvl) : ch;
       });
-    }
+    };
   }
   if (typeof fn === 'function') {
     return wrap(fn, chars);
   }
   return function () {
     return chars;
-  }
+  };
 }
 
 function wrap (fn, chars) {
-  return function (sublvl) {
+  return function (/*sublvl*/) {
     var args = [].slice.call(arguments);
-    return chars.map(function (ch) {
+    return chars.map(function (/*ch*/) {
       var ctx = args.concat.apply([], arguments);
       return fn.apply(fn, ctx);
     });
-  }
+  };
 }
