@@ -4,6 +4,9 @@
   "version": "1.0.1",
   "homepage": "https://github.com/jonschlinkert/list-item",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "contributors": [
+    "Anders D. Johnson (https://github.com/adjohnson916)"
+  ],
   "repository": "jonschlinkert/list-item",
   "bugs": {
     "url": "https://github.com/jonschlinkert/list-item/issues"
