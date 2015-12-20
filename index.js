@@ -10,6 +10,7 @@
 var isNumber = require('is-number');
 var expand = require('expand-range');
 var repeat = require('repeat-string');
+var extend = require('extend-shallow');
 
 /**
  * Expose `listitem`
@@ -34,11 +35,12 @@ module.exports = listitem;
  * //=> '    + Level 2 list item'
  * ```
  *
- * @param  {String} `options`
- *   @option {Boolean} [options] `nobullet` Pass true if you only want the list iten and identation, but no bullets.
- *   @option {String} [options] `indent` The amount of leading indentation to use. default is `  `.
- *   @option {String|Array} [options] `chars` If a string is passed, [expand-range] will be used to generate an array of bullets (visit [expand-range] to see all options.) Or directly pass an array of bullets, numbers, letters or other characters to use for each list item. Default `['-', '*', '+']`
- * @param {Function} `fn` pass a function [expand-range] to modify the bullet for an item as it's generated. See the [examples].
+ * @param  {Object} `options` pass options to customize list item characters, indentation, etc.
+ * @param {Boolean} `options.nobullet` Pass true if you only want the list iten and identation, but no bullets.
+ * @param {String} `options.indent` The amount of leading indentation to use. default is `  `.
+ * @param {String|Array} `options.chars` If a string is passed, [expand-range][] will be used to generate an array of bullets (visit [expand-range][] to see all options.) Or directly pass an array of bullets, numbers, letters or other characters to use for each list item. Default `['-', '*', '+']`
+ * @param {Function} `fn` pass a function [expand-range][] to modify the bullet for an item as it's generated. See the [examples](#examples).
+ * @return {String} returns a formatted list item
  * @api public
  */
 
@@ -49,15 +51,16 @@ function listitem(opts, fn) {
   }
 
   opts = opts || {};
-  var chars = character(opts, fn);
+  var ch = character(opts, fn);
 
-  return function(lvl, str, sublvl) {
+  return function(lvl, str) {
     if (!isNumber(lvl)) {
-      throw new Error('[listitem]: invalid arguments.');
+      throw new Error('expected level to be a number');
     }
 
-    lvl = isNumber(lvl) ? +lvl : 0;
-    var ch = chars(sublvl);
+    // cast to integer
+    lvl = +lvl;
+
     var bullet = ch ? ch[lvl % ch.length] : '';
     var indent = typeof opts.indent !== 'string'
       ? (lvl > 0 ? '  ' : '')
@@ -83,37 +86,21 @@ function listitem(opts, fn) {
  * - https://daringfireball.net/projects/markdown/syntax#list
  * - https://help.github.com/articles/markdown-basics/#lists
  *
- * TODO: split this out into simpler functions.
- *
- * @param  {Object} `opts` Options to pass to [expand-range]
+ * @param  {Object} `opts` Options to pass to [expand-range][]
  * @param  {Function} `fn`
  * @return {Array}
  */
 
 function character(opts, fn) {
+  opts = extend({}, opts);
   var chars = opts.chars || ['-', '*', '+'];
-  if (typeof chars === 'string') {
-    opts = Object.create(opts || {});
-    return function (sublvl) {
-      return expand(chars, opts, function(ch) {
-        return fn ? fn(ch, sublvl) : ch;
-      });
-    };
-  }
-  if (typeof fn === 'function') {
-    return wrap(fn, chars);
-  }
-  return function () {
-    return chars;
-  };
-}
 
-function wrap (fn, chars) {
-  return function (/*sublvl*/) {
-    var args = [].slice.call(arguments);
-    return chars.map(function (/*ch*/) {
-      var ctx = args.concat.apply([], arguments);
-      return fn.apply(fn, ctx);
-    });
-  };
+  if (typeof chars === 'string') {
+    return expand(chars, opts, fn);
+  }
+
+  if (typeof fn === 'function') {
+    return chars.map(fn);
+  }
+  return chars;
 }

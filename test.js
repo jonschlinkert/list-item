@@ -1,5 +1,6 @@
 'use strict';
 
+require('mocha');
 require('should');
 var assert = require('assert');
 var romanize = require('romanize');
@@ -145,7 +146,6 @@ describe('custom characters', function () {
   it('should throw an error:', function () {
     (function () {
       li();
-    }).should.throw('[listitem]: invalid arguments.');
+    }).should.throw('expected level to be a number');
   });
 });
-/* deps: mocha */
