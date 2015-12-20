@@ -4,6 +4,10 @@
   "version": "1.0.1",
   "homepage": "https://github.com/jonschlinkert/list-item",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "maintainers": [
+    "Anders D. Johnson (https://github.com/adjohnson916)",
+    "Jon Schlinkert (https://github.com/jonschlinkert)"
+  ],
   "contributors": [
     "Anders D. Johnson (https://github.com/adjohnson916)"
   ],
@@ -11,10 +15,6 @@
   "bugs": {
     "url": "https://github.com/jonschlinkert/list-item/issues"
   },
-  "maintainers": [
-    "Anders D. Johnson (https://github.com/adjohnson916)",
-    "Jon Schlinkert (https://github.com/jonschlinkert)"
-  ],
   "license": "MIT",
   "files": [
     "index.js"
@@ -28,14 +28,14 @@
   },
   "dependencies": {
     "expand-range": "^1.8.1",
-    "is-number": "^2.0.2",
+    "extend-shallow": "^2.0.1",
+    "is-number": "^2.1.0",
     "repeat-string": "^1.5.2"
   },
   "devDependencies": {
     "mocha": "*",
     "romanize": "^0.1.0",
-    "should": "*",
-    "verb": "git://github.com/verbose/verb"
+    "should": "*"
   },
   "keywords": [
     "bullet",
@@ -54,13 +54,22 @@
   "verb": {
     "related": {
       "list": [
-        "fill-range",
+        "deromanize",
         "expand-range",
-        "to-regex-range",
+        "fill-range",
         "randomatic",
         "romanize",
-        "deromanize"
+        "to-regex-range"
       ]
-    }
+    },
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "reflinks": [
+      "expand-range",
+      "randomatic",
+      "romanize"
+    ],
+    "layout": "default"
   }
 }
