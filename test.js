@@ -1,151 +1,151 @@
 'use strict';
 
 require('mocha');
-require('should');
-var assert = require('assert');
-var romanize = require('romanize');
-var listitem = require('./');
-var li;
+const assert = require('assert');
+const romanize = require('romanize');
+const listitem = require('./');
+let li;
 
-describe('listitem', function () {
-  beforeEach(function () {
+describe('listitem', () => {
+  beforeEach(() => {
     li = listitem();
   })
 
-  it('should not indent a list item when a level is not passed:', function () {
-    li(0, 'a').should.equal('- a');
+  it('should not indent a list item when a level is not passed:', () => {
+    assert.equal(li(0, 'a'), '- a');
   });
 
-  it('should use default indentation when not passed on options:', function () {
+  it('should use default indentation when not passed on options:', () => {
     li = listitem({indent: '    '});
-    li(0, 'a').should.equal('- a');
-    li(1, 'a').should.equal('    * a');
-    li(2, 'a').should.equal('        + a');
-    li(3, 'a').should.equal('            - a');
+    assert.equal(li(0, 'a'), '- a');
+    assert.equal(li(1, 'a'), '    * a');
+    assert.equal(li(2, 'a'), '        + a');
+    assert.equal(li(3, 'a'), '            - a');
   });
 
-  it('should use an `indent` string when passed on the options:', function () {
+  it('should use an `indent` string when passed on the options:', () => {
     li = listitem({indent: '      '});
-    li(0, 'a').should.equal('- a');
-    li(1, 'a').should.equal('      * a');
-    li(2, 'a').should.equal('            + a');
-    li(3, 'a').should.equal('                  - a');
+    assert.equal(li(0, 'a'), '- a');
+    assert.equal(li(1, 'a'), '      * a');
+    assert.equal(li(2, 'a'), '            + a');
+    assert.equal(li(3, 'a'), '                  - a');
   });
 
-  it('should respect zero indentation if define with `indent`:', function () {
+  it('should respect zero indentation if define with `indent`:', () => {
     li = listitem({indent: ''});
-    li(0, 'a').should.equal('- a');
-    li(1, 'a').should.equal('* a');
-    li(2, 'a').should.equal('+ a');
-    li(3, 'a').should.equal('- a');
+    assert.equal(li(0, 'a'), '- a');
+    assert.equal(li(1, 'a'), '* a');
+    assert.equal(li(2, 'a'), '+ a');
+    assert.equal(li(3, 'a'), '- a');
   });
 
-  it('should rotate default bullets:', function () {
-    li(0, 'a').should.equal('- a');
-    li(1, 'a').should.equal('  * a');
-    li(2, 'a').should.equal('    + a');
-    li(3, 'a').should.equal('      - a');
-    li(4, 'a').should.equal('        * a');
-    li(5, 'a').should.equal('          + a');
-    li(6, 'a').should.equal('            - a');
-    li(7, 'a').should.equal('              * a');
-    li(8, 'a').should.equal('                + a');
-    li(7, 'a').should.not.equal(' * a');
+  it('should rotate default bullets:', () => {
+    assert.equal(li(0, 'a'), '- a');
+    assert.equal(li(1, 'a'), '  * a');
+    assert.equal(li(2, 'a'), '    + a');
+    assert.equal(li(3, 'a'), '      - a');
+    assert.equal(li(4, 'a'), '        * a');
+    assert.equal(li(5, 'a'), '          + a');
+    assert.equal(li(6, 'a'), '            - a');
+    assert.equal(li(7, 'a'), '              * a');
+    assert.equal(li(8, 'a'), '                + a');
+    assert.notEqual(li(7, 'a'), ' * a');
   });
 });
 
-describe('custom characters', function () {
-  beforeEach(function () {
+describe('custom characters', () => {
+  beforeEach(() => {
     li = listitem();
   })
 
-  it('should use no bullet when `nobullet` is passed:', function () {
+  it('should use no bullet when `nobullet` is passed:', () => {
     li = listitem({nobullet: true});
 
-    li(0, 'a').should.equal('a');
-    li(1, 'a').should.equal('  a');
-    li(2, 'a').should.equal('    a');
-    li(3, 'a').should.equal('      a');
-    li(7, 'a').should.not.equal(' + a');
+    assert.equal(li(0, 'a'), 'a');
+    assert.equal(li(1, 'a'), '  a');
+    assert.equal(li(2, 'a'), '    a');
+    assert.equal(li(3, 'a'), '      a');
+    assert.notEqual(li(7, 'a'), ' + a');
   });
 
-  it('should use an array of custom characters:', function () {
+  it('should use an array of custom characters:', () => {
     li = listitem({chars: ['A', 'B', 'C', 'D']});
 
-    li(0, 'a').should.equal('A a');
-    li(1, 'a').should.equal('  B a');
-    li(2, 'a').should.equal('    C a');
-    li(3, 'a').should.equal('      D a');
-    li(7, 'a').should.not.equal(' + a');
+    assert.equal(li(0, 'a'), 'A a');
+    assert.equal(li(1, 'a'), '  B a');
+    assert.equal(li(2, 'a'), '    C a');
+    assert.equal(li(3, 'a'), '      D a');
+    assert.notEqual(li(7, 'a'), ' + a');
   });
 
-  it('should rotate custom characters:', function () {
+  it('should rotate custom characters:', () => {
     li = listitem({chars: ['A', 'B', 'C', 'D']});
 
-    li(0, 'a').should.equal('A a');
-    li(1, 'a').should.equal('  B a');
-    li(2, 'a').should.equal('    C a');
-    li(3, 'a').should.equal('      D a');
-    li(4, 'a').should.equal('        A a');
-    li(5, 'a').should.equal('          B a');
-    li(6, 'a').should.equal('            C a');
-    li(7, 'a').should.equal('              D a');
-    li(8, 'a').should.equal('                A a');
-    li(7, 'a').should.not.equal(' + a');
+    assert.equal(li(0, 'a'), 'A a');
+    assert.equal(li(1, 'a'), '  B a');
+    assert.equal(li(2, 'a'), '    C a');
+    assert.equal(li(3, 'a'), '      D a');
+    assert.equal(li(4, 'a'), '        A a');
+    assert.equal(li(5, 'a'), '          B a');
+    assert.equal(li(6, 'a'), '            C a');
+    assert.equal(li(7, 'a'), '              D a');
+    assert.equal(li(8, 'a'), '                A a');
+    assert.notEqual(li(7, 'a'), ' + a');
   });
 
-  it('should expand a range of characters from a string:', function () {
-    li = listitem({chars: '1..5'});
-
-    li(0, 'a').should.equal('1 a');
-    li(1, 'a').should.equal('  2 a');
-    li(2, 'a').should.equal('    3 a');
-    li(3, 'a').should.equal('      4 a');
-    li(4, 'a').should.equal('        5 a');
-    li(7, 'a').should.not.equal(' + a');
-  });
-
-  it('should allow a function to modify the default characters:', function () {
-    li = listitem(function (ch) {
-      return ch + ch + ch;
+  it('should expand a range of characters from a string:', () => {
+    li = listitem({ chars: '1..5' }, (indent, ch, index) => {
+      return indent + index + '.';
     });
 
-    li(0, 'a').should.equal('--- a');
-    li(1, 'a').should.equal('  *** a');
-    li(2, 'a').should.equal('    +++ a');
-    li(3, 'a').should.equal('      --- a');
-    li(7, 'a').should.not.equal(' + a');
+    assert.equal(li(0), '1.');
+    assert.equal(li(1), '  2.');
+    assert.equal(li(2), '    3.');
+    assert.equal(li(3), '      4.');
+    assert.equal(li(4), '        5.');
   });
 
-  it('should use a custom function when an array of chars is passed:', function () {
-    li = listitem({chars: [1, 2, 3, 4, 5]}, function (ch) {
-      return romanize(ch) + '.';
+  it('should allow a function to modify the default characters:', () => {
+    li = listitem((indent, ch) => indent + ch + ch + ch + ' a');
+
+    assert.equal(li(0), '--- a');
+    assert.equal(li(1), '  *** a');
+    assert.equal(li(2), '    +++ a');
+    assert.equal(li(3), '      --- a');
+  });
+
+  it('should take an array of characters', () => {
+    li = listitem({ chars: [1, 2, 3, 4, 5, 6] }, (indent, ch) => {
+      return indent + romanize(ch) + '.';
     });
 
-    li(0, 'a').should.equal('I. a');
-    li(1, 'a').should.equal('  II. a');
-    li(2, 'a').should.equal('    III. a');
-    li(3, 'a').should.equal('      IV. a');
-    li(4, 'a').should.equal('        V. a');
-    li(7, 'a').should.not.equal(' + a');
-  });
-
-  it('should use a custom function when characters are generated by expand-range:', function () {
-    li = listitem({chars: '1..100..10'}, function (ch) {
-      return romanize(ch) + '.';
+    let sub = listitem({ chars: [1, 2, 3, 4, 5, 6] }, (indent, ch) => {
+      return ' ' + ch;
     });
 
-    li(0, 'a').should.equal('I. a');
-    li(1, 'a').should.equal('  XI. a');
-    li(2, 'a').should.equal('    XXI. a');
-    li(3, 'a').should.equal('      XXXI. a');
-    li(4, 'a').should.equal('        XLI. a');
-    li(7, 'a').should.not.equal(' + a');
+    assert.equal(li(0) + sub(0), 'I. 1');
+    assert.equal(li(0) + sub(1), 'I. 2');
+    assert.equal(li(0) + sub(2), 'I. 3');
+    assert.equal(li(1), '  II.');
+    assert.equal(li(2), '    III.');
+    assert.equal(li(3), '      IV.');
+    assert.equal(li(4), '        V.');
+    assert.equal(li(5), '          VI.');
   });
 
-  it('should throw an error:', function () {
-    (function () {
-      li();
-    }).should.throw('expected level to be a number');
+  it('should use a custom function when characters are generated by fill-range:', () => {
+    li = listitem({ chars: '1..100..10' }, (indent, ch, index) => {
+      return indent + romanize(ch) + '.';
+    });
+
+    assert.equal(li(0), 'I.');
+    assert.equal(li(1), '  XI.');
+    assert.equal(li(2), '    XXI.');
+    assert.equal(li(3), '      XXXI.');
+    assert.equal(li(4), '        XLI.');
+  });
+
+  it('should throw an error:', () => {
+    assert.throws(() => li(), /expected level to be a number/);
   });
 });
